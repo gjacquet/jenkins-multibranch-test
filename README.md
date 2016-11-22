@@ -8,6 +8,19 @@ project.
 With this configuration Jenkins will only register `PULL_REQUEST` and `REPOSITORY` events on the webhook. `PUSH` is not
 currently registered.
 
+![Webhook screenshot](https://raw.githubusercontent.com/gjacquet/jenkins-multibranch-test/master/images/hooks.png)
+
+N.B. for some reason hooks are not registered on startup and you need to go to configuration and hit "Re-register hooks for all jobs" button.
+
+At this point Jenkins logs will show entries like these ones:
+
+```
+Nov 22, 2016 11:09:01 PM org.jenkinsci.plugins.github.config.GitHubPluginConfig doReRegister
+INFO: Called registerHooks() for 1 jobs
+Nov 22, 2016 11:09:01 PM org.jenkinsci.plugins.github.webhook.WebhookManager$1 run
+INFO: GitHub webhooks activated for job multibranch-test/master with [GitHubRepositoryName[host=github.com,username=gjacquet,repository=jenkins-multibranch-test]] (events: [PULL_REQUEST, REPOSITORY])
+```
+
 # Building
  
 Simply run `docker build` in the root of the repository. E.g.
