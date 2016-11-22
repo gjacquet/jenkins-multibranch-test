@@ -43,7 +43,7 @@ RUN install-plugins.sh \
         pipeline-maven:0.3 \
         pipeline-utility-steps:1.1.6 \
         active-directory:2.0 \
-        pipeline-model-definition:0.5 \
+        pipeline-model-definition:0.6 \
         docker-workflow:1.9 \
         docker-commons:1.5 \
         build-user-vars-plugin:1.5 \
@@ -61,5 +61,6 @@ ENV GITHUB_REPOSITORY jenkins-multibranch-test
 ENV GITHUB_USER gjacquet
 ENV GITHUB_TOKEN token
 ENV GITHUB_WEBHOOK_PATH github-webhook
+ENV GITHUB_WEBHOOK_SHARED_SECRET topsecret
 
 COPY src/main/groovy/*.groovy /usr/share/jenkins/ref/init.groovy.d/

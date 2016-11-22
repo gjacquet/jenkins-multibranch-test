@@ -1,5 +1,20 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import groovy.xml.MarkupBuilder
 
+import javax.xml.transform.stream.StreamSource
 import java.nio.charset.StandardCharsets
 
 def env = System.getenv()
@@ -31,6 +46,7 @@ xml.'org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject' {
                     repoOwner(env.GITHUB_ORGANIZATION)
                     repository(env.GITHUB_REPOSITORY)
                     includes('*')
+                    excludes()
                     buildOriginBranch(true)
                     buildOriginBranchWithPR(true)
                     buildOriginPRMerge(false)
@@ -56,4 +72,10 @@ xml.'org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject' {
 }
 
 def stream = new ByteArrayInputStream(writer.toString().getBytes(StandardCharsets.UTF_8))
-jenkins.model.Jenkins.instance.createProjectFromXML('multibranch-test', stream)
+def jobName = 'multibranch-test'
+def job = jenkins.model.Jenkins.instance.getItemByFullName(jobName, hudson.model.AbstractItem)
+if (!job) {
+    jenkins.model.Jenkins.instance.createProjectFromXML(jobName, stream)
+} else {
+    job.updateByXml(new StreamSource(stream))
+}
